@@ -22,6 +22,11 @@ public class MainController {
 
     private final MainService mainService;
 
+    @GetMapping("/")
+    public String lb() {
+        return "ok";
+    }
+
     @GetMapping("/main")
     public ResponseEntity<?> main(@AuthenticationPrincipal MyUserDetails myUserDetails) {
         MainResp mainResp = mainService.게시글목록보기(myUserDetails.getUser().getId());
