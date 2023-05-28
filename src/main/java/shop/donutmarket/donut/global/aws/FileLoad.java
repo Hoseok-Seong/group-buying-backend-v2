@@ -21,7 +21,7 @@ public class FileLoad {
 
     private final AmazonS3 amazonS3Client;
 
-    private String bucketName = "groupbuying";
+    private String bucketName = "groupbuying3";
 
     public FileLoad(AmazonS3 amazonS3Client) {
         this.amazonS3Client = amazonS3Client;

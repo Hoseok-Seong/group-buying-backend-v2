@@ -19,7 +19,7 @@ import shop.donutmarket.donut.domain.user.repository.UserRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ActiveProfiles("domain-test")
+@ActiveProfiles("test")
 @DataJpaTest
 public class UserRepositoryTest {
 

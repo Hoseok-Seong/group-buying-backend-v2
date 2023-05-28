@@ -7,10 +7,10 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mariadb://${rds.hostname}:${rds.port}/${rds.db.name}?allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mariadb://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false
     driver-class-name: org.mariadb.jdbc.Driver
-    username: ${rds.username}
-    password: ${rds.password}
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
   jpa:
     open-in-view: false
     hibernate:
@@ -24,15 +24,16 @@ spring:
       enabled: always
   security:
     user:
-      name: ssar
-      password: 1234
+      name:
+      password:
+
 cloud:
   aws:
     credentials:
-      access-key: ${S3_ACCESS_KEY}
-      secret-key: ${S3_SECRET_KEY}
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
     s3:
-      bucket: groupbuying
+      bucket: groupbuying3
     region:
       static: ap-northeast-2
     stack:
@@ -53,8 +54,8 @@ sentry:
     minimum-event-level: info
 
 boot-pay:
-  rest-api-key: ${REST_API_KEY}
-  private-key: ${PRIVATE_KEY}
+  rest-api-key: ${BOOT_ACCESS_KEY}
+  private-key: ${BOOT_SECRET_KEY}
 
 
 

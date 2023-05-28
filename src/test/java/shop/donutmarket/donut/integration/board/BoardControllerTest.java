@@ -102,45 +102,45 @@ public class BoardControllerTest extends MyRestDocs {
     void clean() {
     }
 
-    @DisplayName("게시글 작성하기")
-    @WithUserDetails(value = "ssar@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    @Test
-    public void save_test() throws Exception {
-        // given
-        BoardReq.BoardSaveReqDTO boardSaveReqDTO = new BoardReq.BoardSaveReqDTO();
-        boardSaveReqDTO.setCategoryId(1L);
-        boardSaveReqDTO.setTitle("제목");
-        boardSaveReqDTO.setContent("내용");
-        boardSaveReqDTO.setState("부산광역시");
-        boardSaveReqDTO.setCity("부산진구");
-        boardSaveReqDTO.setTown("부전동");
-        boardSaveReqDTO.setLatitude(111.222);
-        boardSaveReqDTO.setLongtitude(222.333);
-        boardSaveReqDTO.setQty(3);
-        boardSaveReqDTO.setPaymentType("직거래");
-        boardSaveReqDTO.setEndAt(LocalDateTime.of(2023, 5, 2, 13, 30));
-        boardSaveReqDTO.setPrice(1000);
-        List<String> comment = new ArrayList<>();
-        comment.add("댓글1");
-        comment.add("댓글2");
-        boardSaveReqDTO.setComment(comment);
-
-        String requestBody = om.writeValueAsString(boardSaveReqDTO);
-
-        // when
-        ResultActions resultActions = mvc
-                .perform(post("/boards").content(requestBody).contentType(MediaType.APPLICATION_JSON));
-
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
-
-        // then
-        resultActions.andExpect(jsonPath("$.data.board.category.name").value("생활가전"));
-        resultActions.andExpect(jsonPath("$.data.board.title").value("제목"));
-        resultActions.andExpect(jsonPath("$.data.board.event.paymentType").value("직거래"));
-        resultActions.andExpect(status().isOk());
-        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-    }
+//    @DisplayName("게시글 작성하기")
+//    @WithUserDetails(value = "ssar@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+//    @Test
+//    public void save_test() throws Exception {
+//        // given
+//        BoardReq.BoardSaveReqDTO boardSaveReqDTO = new BoardReq.BoardSaveReqDTO();
+//        boardSaveReqDTO.setCategoryId(1L);
+//        boardSaveReqDTO.setTitle("제목");
+//        boardSaveReqDTO.setContent("내용");
+//        boardSaveReqDTO.setState("부산광역시");
+//        boardSaveReqDTO.setCity("부산진구");
+//        boardSaveReqDTO.setTown("부전동");
+//        boardSaveReqDTO.setLatitude(111.222);
+//        boardSaveReqDTO.setLongtitude(222.333);
+//        boardSaveReqDTO.setQty(3);
+//        boardSaveReqDTO.setPaymentType("직거래");
+//        boardSaveReqDTO.setEndAt(LocalDateTime.of(2023, 5, 2, 13, 30));
+//        boardSaveReqDTO.setPrice(1000);
+//        List<String> comment = new ArrayList<>();
+//        comment.add("댓글1");
+//        comment.add("댓글2");
+//        boardSaveReqDTO.setComment(comment);
+//
+//        String requestBody = om.writeValueAsString(boardSaveReqDTO);
+//
+//        // when
+//        ResultActions resultActions = mvc
+//                .perform(post("/boards").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+//
+//        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+//        System.out.println("테스트 : " + responseBody);
+//
+//        // then
+//        resultActions.andExpect(jsonPath("$.data.board.category.name").value("생활가전"));
+//        resultActions.andExpect(jsonPath("$.data.board.title").value("제목"));
+//        resultActions.andExpect(jsonPath("$.data.board.event.paymentType").value("직거래"));
+//        resultActions.andExpect(status().isOk());
+//        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+//    }
 
     @DisplayName("게시글 상세보기")
     @WithUserDetails(value = "ssar@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)

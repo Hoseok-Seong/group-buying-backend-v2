@@ -10,8 +10,6 @@ truncate table participant;
 truncate table payment;
 truncate table wishlist;
 truncate table my_category;
-truncate table chatroom;
-truncate table chatter_list;
 truncate table my_location;
 truncate table blacklist;
 truncate table report;

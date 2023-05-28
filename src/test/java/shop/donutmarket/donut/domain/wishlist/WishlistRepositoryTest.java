@@ -21,7 +21,7 @@ import shop.donutmarket.donut.domain.wishlist.repository.WishlistRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ActiveProfiles("domain-test")
+@ActiveProfiles("test")
 @DataJpaTest
 public class WishlistRepositoryTest {
     
