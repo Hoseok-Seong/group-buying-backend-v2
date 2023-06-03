@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import shop.donutmarket.donut.domain.review.dto.ReviewReq.ReviewSaveReqDTO;
 import shop.donutmarket.donut.domain.review.dto.ReviewResp.ReviewSaveRespDTO;
+import shop.donutmarket.donut.domain.review.model.Rate;
 import shop.donutmarket.donut.domain.review.model.Review;
 import shop.donutmarket.donut.domain.review.repository.ReviewRepository;
 import shop.donutmarket.donut.domain.user.model.User;
@@ -24,6 +25,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+    private final RateService rateService;
 
     @Transactional
     public ReviewSaveRespDTO 리뷰작성(ReviewSaveReqDTO reviewSaveReqDTO, @AuthenticationPrincipal MyUserDetails myUserDetails) {
@@ -50,11 +52,18 @@ public class ReviewService {
             Review reviewPS = reviewRepository.save(review);
 
             // 리뷰 등록시 유저 두명 모두 기본 포인트 1점 추가
-            reviewedUserPS.rateUp();
-            reviewerUserPS.rateUp();
+            reviewedUserPS.reviewDefaultScoreUp();
+            reviewerUserPS.reviewDefaultScoreUp();
 
             // 리뷰 평점별 포인트 추가
             reviewedUserPS.reviewScoreUp(reviewSaveReqDTO.getScore());
+
+            // 일정 포인트 이상일 시 승급하기
+            Rate reviewedRate = rateService.승급하기(reviewedUserPS.getRatePoint());
+            Rate reviewerRate = rateService.승급하기(reviewerUserPS.getRatePoint());
+
+            reviewedUserPS.updateRate(reviewedRate);
+            reviewerUserPS.updateRate(reviewerRate);
 
             ReviewSaveRespDTO saveRespDTO = new ReviewSaveRespDTO(reviewPS);
             return saveRespDTO;

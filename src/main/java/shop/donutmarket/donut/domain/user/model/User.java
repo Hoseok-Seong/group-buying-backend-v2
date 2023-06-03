@@ -73,12 +73,16 @@ public class User {
         this.statusCode = statusCode;
     }
 
-    public void rateUp(){
+    public void reviewDefaultScoreUp(){
         this.ratePoint++;
     }
 
     public void reviewScoreUp(int score){
         this.ratePoint+= score;
+    }
+
+    public void updateRate(Rate rate) {
+        this.rate = rate;
     }
 
     public void updateProfile(String profile) {
