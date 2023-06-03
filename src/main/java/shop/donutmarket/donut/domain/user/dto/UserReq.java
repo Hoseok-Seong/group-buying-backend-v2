@@ -37,7 +37,6 @@ public class UserReq {
     @Getter
     @Setter
     public static class UpdateDTO {
-        @NotBlank(message = "비밀번호를 적어주세요")
         private String password;
         private String profile;
 

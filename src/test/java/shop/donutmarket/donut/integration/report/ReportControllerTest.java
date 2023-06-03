@@ -37,6 +37,7 @@ import shop.donutmarket.donut.global.dummy.DummyEntity;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -131,7 +132,7 @@ public class ReportControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/reports/"+id).content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/reports/"+id).content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);

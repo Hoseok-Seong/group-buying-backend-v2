@@ -77,6 +77,10 @@ public class User {
         this.ratePoint++;
     }
 
+    public void reviewScoreUp(int score){
+        this.ratePoint+= score;
+    }
+
     public void updateProfile(String profile) {
         this.profile = profile;
     }

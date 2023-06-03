@@ -37,6 +37,7 @@ import shop.donutmarket.donut.global.dummy.DummyEntity;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -156,7 +157,7 @@ public class ParticipantControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/participants").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/participants").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -182,7 +183,7 @@ public class ParticipantControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(put("/participants/select").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(put("/participants/select").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -209,7 +210,7 @@ public class ParticipantControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(put("/participants/cancel").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(put("/participants/cancel").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -236,7 +237,7 @@ public class ParticipantControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(put("/participants/drop").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(put("/participants/drop").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);

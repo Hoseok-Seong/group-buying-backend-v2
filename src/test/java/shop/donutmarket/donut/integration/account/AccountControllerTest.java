@@ -36,6 +36,7 @@ import shop.donutmarket.donut.global.dummy.DummyEntity;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -101,7 +102,7 @@ public class AccountControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/accounts").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/accounts").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -114,23 +115,23 @@ public class AccountControllerTest extends MyRestDocs {
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-//    @DisplayName("계좌 삭제")
-//    @WithUserDetails(value = "ssar@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-//    @Test
-//    public void delete_test() throws Exception {
-//        // given
-//
-//        // when
-//        ResultActions resultActions = mvc
-//                .perform(delete("/accounts"));
-//
-//        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-//        System.out.println("테스트 : " + responseBody);
-//
-//        // then
-//        resultActions.andExpect(status().isOk());
-//        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-//    }
+    @DisplayName("계좌 삭제")
+    @WithUserDetails(value = "ssar@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void delete_test() throws Exception {
+        // given
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(delete("/accounts").with(csrf()));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
 
     @DisplayName("계좌 수정")
     @WithUserDetails(value = "ssar@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -144,7 +145,7 @@ public class AccountControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(put("/accounts").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(put("/accounts").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);

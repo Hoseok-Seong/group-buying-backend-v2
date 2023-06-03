@@ -38,6 +38,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -178,7 +179,7 @@ public class BoardControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(put("/boards").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(put("/boards").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);

@@ -36,6 +36,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -127,7 +128,7 @@ public class MyCategoryControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/myCategories/default"));
+                .perform(post("/myCategories/default").with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -153,7 +154,7 @@ public class MyCategoryControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/myCategories").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/myCategories").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);

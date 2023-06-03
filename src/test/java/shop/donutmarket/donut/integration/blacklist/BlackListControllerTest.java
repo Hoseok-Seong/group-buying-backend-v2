@@ -33,6 +33,7 @@ import shop.donutmarket.donut.global.dummy.DummyEntity;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -88,7 +89,7 @@ public class BlackListControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/blacklists/"+id));
+                .perform(post("/blacklists/"+id).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);

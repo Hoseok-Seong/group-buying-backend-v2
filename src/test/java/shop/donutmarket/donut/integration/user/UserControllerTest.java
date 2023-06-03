@@ -34,6 +34,7 @@ import shop.donutmarket.donut.global.dummy.DummyEntity;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -85,7 +86,7 @@ public class UserControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -107,7 +108,7 @@ public class UserControllerTest extends MyRestDocs {
 
         // when
         ResultActions resultActions = mvc
-                .perform(post("/login").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+                .perform(post("/login").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
@@ -118,27 +119,27 @@ public class UserControllerTest extends MyRestDocs {
         resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
     }
 
-//    @DisplayName("회원수정")
-//    @WithUserDetails(value = "ssar@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-//    @Test
-//    public void update_test() throws Exception {
-//        // given
-//        UserReq.UpdateDTO updateDTO = new UserReq.UpdateDTO();
-//        updateDTO.setPassword("4321");
+    @DisplayName("회원수정")
+    @WithUserDetails(value = "ssar@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void update_test() throws Exception {
+        // given
+        UserReq.UpdateDTO updateDTO = new UserReq.UpdateDTO();
+        updateDTO.setPassword("4321");
 //        updateDTO.setProfile("src/main/resources/static/images.png");
-//        String requestBody = om.writeValueAsString(updateDTO);
-//
-//        // when
-//        ResultActions resultActions = mvc
-//                .perform(put("/users/update").content(requestBody).contentType(MediaType.APPLICATION_JSON));
-//
-//        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-//        System.out.println("테스트 : " + responseBody);
-//
-//        // then
-//        // resultActions.andExpect(jsonPath("$.data.profile").value("User1profile.png"));
-//        resultActions.andExpect(status().isOk());
-//        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
-//    }
+        String requestBody = om.writeValueAsString(updateDTO);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(put("/users/update").content(requestBody).contentType(MediaType.APPLICATION_JSON).with(csrf()));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        // resultActions.andExpect(jsonPath("$.data.profile").value("User1profile.png"));
+        resultActions.andExpect(status().isOk());
+        resultActions.andDo(MockMvcResultHandlers.print()).andDo(document);
+    }
 
 }

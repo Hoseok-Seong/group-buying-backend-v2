@@ -43,10 +43,10 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // 1. CSRF 해제
-        http.csrf().disable(); // POSTMAN 접근을 위해 - CSR
+//        http.csrf().disable(); // POSTMAN 접근을 위해 - CSR
 
-        // 2. iframe 거부
-        http.headers().frameOptions().disable();
+        // 2. 같은 도메인 iframe만 허용
+        http.headers().frameOptions().sameOrigin();
 
         // 3. CORS 재설정
         http.cors().configurationSource(configurationSource());
