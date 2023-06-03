@@ -49,19 +49,36 @@ repositories {
 }
 
 dependencies {
+    // restdocs 관련
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-    implementation 'software.amazon.awssdk:s3-transfer-manager:2.20.55'
-    implementation 'software.amazon.awssdk.crt:aws-crt:0.21.7'
+    
+    // aws s3 관련
+    implementation 'software.amazon.awssdk:s3'
+    
+    // sentry 관련
     implementation 'io.sentry:sentry-spring-boot-starter-jakarta:6.17.0'
     implementation 'io.sentry:sentry-logback:6.17.0'
+    
+    // firebase 관련
     implementation 'com.google.firebase:firebase-admin:9.1.1'
+    
+    // oauth 관련
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    
+    // bootpay 관련
     implementation 'io.github.bootpay:backend:+'
+    
+    // json 관련
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8'
+    
+    // validation 관련
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    // jwt 관련
     implementation group: 'com.auth0', name: 'java-jwt', version: '4.3.0'
+    
+    // 기본
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
