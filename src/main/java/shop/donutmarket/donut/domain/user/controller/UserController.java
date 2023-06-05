@@ -45,13 +45,13 @@ public class UserController {
         return responseEntity;
     }
 
-    @PutMapping("/users/update")
-    public ResponseEntity<?> update(@AuthenticationPrincipal MyUserDetails myUserDetails,
-                                    @RequestBody @Valid UserReq.UpdateDTO updateDTO, BindingResult bindingResult) {
-        UserResp.UpdateDTO resp = userService.회원수정(myUserDetails, updateDTO);
-        ResponseDTO<?> responseDTO = new ResponseDTO<>(resp);
-        return ResponseEntity.ok(responseDTO);
-    }
+//    @PutMapping("/users/update")
+//    public ResponseEntity<?> update(@AuthenticationPrincipal MyUserDetails myUserDetails,
+//                                    @RequestBody @Valid UserReq.UpdateDTO updateDTO, BindingResult bindingResult) {
+//        UserResp.UpdateDTO resp = userService.회원수정(myUserDetails, updateDTO);
+//        ResponseDTO<?> responseDTO = new ResponseDTO<>(resp);
+//        return ResponseEntity.ok(responseDTO);
+//    }
 
     @GetMapping("/jwtToken")
     public ResponseEntity<?> jwtToken(HttpServletRequest request) {

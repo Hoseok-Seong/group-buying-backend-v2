@@ -18,7 +18,6 @@ import shop.donutmarket.donut.domain.user.dto.UserResp;
 import shop.donutmarket.donut.domain.user.model.User;
 import shop.donutmarket.donut.domain.user.repository.UserRepository;
 import shop.donutmarket.donut.global.auth.MyUserDetails;
-import shop.donutmarket.donut.global.aws.FileLoad;
 import shop.donutmarket.donut.global.dto.ResponseDTO;
 import shop.donutmarket.donut.global.exception.Exception404;
 import shop.donutmarket.donut.global.exception.Exception500;
@@ -36,7 +35,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final RateRepository rateRepository;
-    private final FileLoad fileLoad;
+//    private final FileLoad fileLoad;
 
     @Transactional
     public ResponseEntity<?> 회원가입(UserReq.JoinDTO joinDTO) {
@@ -101,49 +100,49 @@ public class UserService {
         }
     }
 
-    @Transactional
-    public UserResp.UpdateDTO 회원수정(@AuthenticationPrincipal MyUserDetails myUserDetails, UserReq.UpdateDTO updateDTO) {
-        Optional<User> userOP = userRepository.findByIdJoinFetch(myUserDetails.getUser().getId());
-
-        if (userOP.isEmpty()) {
-            throw new Exception404("존재하지 않는 회원입니다");
-        }
-        User userPS = userOP.get();
-
-        try {
-            // 회원 수정
-            LocalDateTime localDateTime = LocalDateTime.now();
-            String imglink = "";
-
-            if (updateDTO.getProfile() != null) {
-                String decodeLink = MyBase64Decoder.decodeBase64(updateDTO.getProfile());
-                String imgName = "User" + userPS.getId() + "profile";
-                fileLoad.uploadFile(imgName, decodeLink);
-                imglink = fileLoad.downloadObject(imgName);
-            }
-
-            userPS.updateUser(updateDTO.getPassword(), imglink, localDateTime);
-
-        } catch (Exception e) {
-            throw new Exception500("회원수정 실패 : " + e.getMessage());
-        }
-
-        // 다시 db에서 조회
-        Optional<User> data = userRepository.findByIdJoinFetch(myUserDetails.getUser().getId());
-
-        if (data.isEmpty()) {
-            throw new Exception404("존재하지 않는 회원입니다");
-        }
-
-        try {
-            User user = data.get();
-            UserResp.UpdateDTO resp = new UserResp.UpdateDTO(user.getUsername(), user.getEmail(), user.getProfile(),
-                    user.getRole());
-            return resp;
-        } catch (Exception e) {
-            throw new Exception500("회원수정 데이터 반환 실패 : " + e.getMessage());
-        }
-    }
+//    @Transactional
+//    public UserResp.UpdateDTO 회원수정(@AuthenticationPrincipal MyUserDetails myUserDetails, UserReq.UpdateDTO updateDTO) {
+//        Optional<User> userOP = userRepository.findByIdJoinFetch(myUserDetails.getUser().getId());
+//
+//        if (userOP.isEmpty()) {
+//            throw new Exception404("존재하지 않는 회원입니다");
+//        }
+//        User userPS = userOP.get();
+//
+//        try {
+//            // 회원 수정
+//            LocalDateTime localDateTime = LocalDateTime.now();
+//            String imglink = "";
+//
+//            if (updateDTO.getProfile() != null) {
+//                String decodeLink = MyBase64Decoder.decodeBase64(updateDTO.getProfile());
+//                String imgName = "User" + userPS.getId() + "profile";
+//                fileLoad.uploadFile(imgName, decodeLink);
+//                imglink = fileLoad.downloadObject(imgName);
+//            }
+//
+//            userPS.updateUser(updateDTO.getPassword(), imglink, localDateTime);
+//
+//        } catch (Exception e) {
+//            throw new Exception500("회원수정 실패 : " + e.getMessage());
+//        }
+//
+//        // 다시 db에서 조회
+//        Optional<User> data = userRepository.findByIdJoinFetch(myUserDetails.getUser().getId());
+//
+//        if (data.isEmpty()) {
+//            throw new Exception404("존재하지 않는 회원입니다");
+//        }
+//
+//        try {
+//            User user = data.get();
+//            UserResp.UpdateDTO resp = new UserResp.UpdateDTO(user.getUsername(), user.getEmail(), user.getProfile(),
+//                    user.getRole());
+//            return resp;
+//        } catch (Exception e) {
+//            throw new Exception500("회원수정 데이터 반환 실패 : " + e.getMessage());
+//        }
+//    }
 
     @Transactional
     public UserResp.JwtUserDTO JWT확인(HttpServletRequest request) {

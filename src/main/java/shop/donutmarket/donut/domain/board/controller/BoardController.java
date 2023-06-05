@@ -38,12 +38,12 @@ public class BoardController {
     private final BoardService boardService;
     private final TagService tagService;
 
-    @PostMapping
-    public ResponseEntity<?> save(@AuthenticationPrincipal MyUserDetails myUserDetails, @RequestBody @Valid BoardSaveReqDTO boardSaveReqDTO, BindingResult bindingResult) {
-        BoardSaveRespDTO saveRespDTO = boardService.게시글작성(boardSaveReqDTO, myUserDetails);
-        ResponseDTO<?> responseDTO = new ResponseDTO<>(saveRespDTO);
-        return ResponseEntity.ok(responseDTO);
-    }
+//    @PostMapping
+//    public ResponseEntity<?> save(@AuthenticationPrincipal MyUserDetails myUserDetails, @RequestBody @Valid BoardSaveReqDTO boardSaveReqDTO, BindingResult bindingResult) {
+//        BoardSaveRespDTO saveRespDTO = boardService.게시글작성(boardSaveReqDTO, myUserDetails);
+//        ResponseDTO<?> responseDTO = new ResponseDTO<>(saveRespDTO);
+//        return ResponseEntity.ok(responseDTO);
+//    }
     
     @GetMapping("/{id}")
     public ResponseEntity<?> detail(@PathVariable Long id) {

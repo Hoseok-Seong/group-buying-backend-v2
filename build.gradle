@@ -54,7 +54,7 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     
     // aws s3 관련
-    implementation 'software.amazon.awssdk:s3'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.0'
     
     // sentry 관련
     implementation 'io.sentry:sentry-spring-boot-starter-jakarta:6.17.0'

@@ -22,7 +22,6 @@ import shop.donutmarket.donut.domain.review.repository.ReviewRepository;
 import shop.donutmarket.donut.domain.user.model.User;
 import shop.donutmarket.donut.domain.user.repository.UserRepository;
 import shop.donutmarket.donut.global.auth.MyUserDetails;
-import shop.donutmarket.donut.global.aws.FileLoad;
 import shop.donutmarket.donut.global.exception.Exception404;
 import shop.donutmarket.donut.global.exception.Exception500;
 
@@ -42,7 +41,7 @@ public class MyPageService {
 
     private final UserRepository userRepository;
 
-    private final FileLoad fileLoad;
+//    private final FileLoad fileLoad;
 
     @Transactional(readOnly = true)
     public MyPageResp.MyBoardDTO 나의게시글보기(Long id) {
@@ -99,22 +98,22 @@ public class MyPageService {
         }
     }
 
-    @Transactional
-    public void 프로필변경(String imgPath, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        try {
-            Long userId = myUserDetails.getUser().getId();
-            Optional<User> userOP = userRepository.findById(userId);
-            if (!(userOP.isPresent())) {
-                throw new Exception404("존재하지 않는 유저입니다.");
-            }
-            User userPS = userOP.get();
-            String imgName = "User"+ Long.toString(userId) + "profile";
-            
-            userPS.updateProfile(imgName);
-
-            fileLoad.uploadFile(imgName, imgPath);
-        } catch (Exception e) {
-            throw new Exception500("프로필 수정에 실패했습니다");
-        }
-    }
+//    @Transactional
+//    public void 프로필변경(String imgPath, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+//        try {
+//            Long userId = myUserDetails.getUser().getId();
+//            Optional<User> userOP = userRepository.findById(userId);
+//            if (!(userOP.isPresent())) {
+//                throw new Exception404("존재하지 않는 유저입니다.");
+//            }
+//            User userPS = userOP.get();
+//            String imgName = "User"+ Long.toString(userId) + "profile";
+//
+//            userPS.updateProfile(imgName);
+//
+//            fileLoad.uploadFile(imgName, imgPath);
+//        } catch (Exception e) {
+//            throw new Exception500("프로필 수정에 실패했습니다");
+//        }
+//    }
 }

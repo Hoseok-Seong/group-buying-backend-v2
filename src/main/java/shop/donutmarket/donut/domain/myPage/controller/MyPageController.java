@@ -56,10 +56,10 @@ public class MyPageController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PutMapping("/profile")
-    public ResponseEntity<?> myProfile(@RequestBody String imgPath, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        myPageService.프로필변경(imgPath, myUserDetails);
-        ResponseDTO<?> responseDTO = new ResponseDTO<>("프로필 변경에 성공했습니다.");
-        return ResponseEntity.ok().body(responseDTO);
-    }
+//    @PutMapping("/profile")
+//    public ResponseEntity<?> myProfile(@RequestBody String imgPath, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+//        myPageService.프로필변경(imgPath, myUserDetails);
+//        ResponseDTO<?> responseDTO = new ResponseDTO<>("프로필 변경에 성공했습니다.");
+//        return ResponseEntity.ok().body(responseDTO);
+//    }
 }
