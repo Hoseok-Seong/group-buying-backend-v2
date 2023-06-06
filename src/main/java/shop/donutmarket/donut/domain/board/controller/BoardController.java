@@ -5,16 +5,11 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import shop.donutmarket.donut.domain.board.dto.BoardReq.BoardDeleteReqDTO;
 import shop.donutmarket.donut.domain.board.dto.BoardReq.BoardSaveReqDTO;
 import shop.donutmarket.donut.domain.board.dto.BoardReq.BoardSearchCategoryReqDto;
@@ -38,12 +33,15 @@ public class BoardController {
     private final BoardService boardService;
     private final TagService tagService;
 
-//    @PostMapping
-//    public ResponseEntity<?> save(@AuthenticationPrincipal MyUserDetails myUserDetails, @RequestBody @Valid BoardSaveReqDTO boardSaveReqDTO, BindingResult bindingResult) {
-//        BoardSaveRespDTO saveRespDTO = boardService.게시글작성(boardSaveReqDTO, myUserDetails);
-//        ResponseDTO<?> responseDTO = new ResponseDTO<>(saveRespDTO);
-//        return ResponseEntity.ok(responseDTO);
-//    }
+    @PostMapping
+    public ResponseEntity<?> save(@AuthenticationPrincipal MyUserDetails myUserDetails,
+                                  @RequestPart(value = "boardSaveReqDTO") @Valid BoardSaveReqDTO boardSaveReqDTO,
+                                  @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+                                  BindingResult bindingResult) {
+        BoardSaveRespDTO saveRespDTO = boardService.게시글작성(multipartFile, boardSaveReqDTO, myUserDetails);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(saveRespDTO);
+        return ResponseEntity.ok(responseDTO);
+    }
     
     @GetMapping("/{id}")
     public ResponseEntity<?> detail(@PathVariable Long id) {

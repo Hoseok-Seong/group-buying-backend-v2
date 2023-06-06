@@ -37,6 +37,7 @@ public class MainResp {
         private String state;
         private String city;
         private String town;
+        private String imgKey;
         private int price;
         private int qty;
         private double latitude;
@@ -51,6 +52,7 @@ public class MainResp {
             this.state = board.getState();
             this.city = board.getCity();
             this.town = board.getTown();
+            this.imgKey = board.getImgKey();
             this.price = board.getEvent().getPrice();
             this.qty = board.getEvent().getQty();
             this.latitude = board.getEvent().getLatitude();

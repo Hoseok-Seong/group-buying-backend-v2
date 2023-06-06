@@ -79,7 +79,7 @@ public class UserControllerTest extends MyRestDocs {
     public void join_test() throws Exception {
         // given
         UserReq.JoinDTO joinDTO = new UserReq.JoinDTO();
-        joinDTO.setEmail("cos@naver.com");
+        joinDTO.setUsername("cos@naver.com");
         joinDTO.setPassword("1234");
         joinDTO.setNickname("코스");
         String requestBody = om.writeValueAsString(joinDTO);

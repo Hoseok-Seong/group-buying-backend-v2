@@ -28,7 +28,7 @@ public class BoardReq {
         private String title;
         @NotBlank(message = "내용을 입력해주세요.")
         private String content;
-        private String img;
+        private String imgKey;
         @NotBlank(message = "광역시 또는 도를 입력해주세요.")
         private String state;
         @NotBlank(message = "시 또는 군 또는 자치구를 입력해주세요.")
@@ -51,8 +51,8 @@ public class BoardReq {
         // tag
         private List<String> comment;
 
-        public Board toBoardEntity(Event event, Category category, String Base64img, User organizer){
-            return Board.builder().category(category).title(title).organizer(organizer).content(content).img(Base64img)
+        public Board toBoardEntity(Event event, Category category, String imgKey, User organizer){
+            return Board.builder().category(category).title(title).organizer(organizer).content(content).imgKey(imgKey)
             .event(event).views(0).recommend(false).state(state).city(city).town(town).createdAt(LocalDateTime.now()).build();
         }
 

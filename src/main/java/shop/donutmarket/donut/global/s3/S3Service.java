@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 @Service
 public class S3Service {
@@ -23,14 +24,14 @@ public class S3Service {
     }
 
     @Transactional
-    public ResponseEntity<?> upload(MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<?> upload(MultipartFile multipartFile, String key) throws IOException {
         if (!MediaType.IMAGE_PNG.toString().equals(multipartFile.getContentType()) &&
                 !MediaType.IMAGE_JPEG.toString().equals(multipartFile.getContentType())) {
             return ResponseEntity.badRequest().body("사진 파일만 업로드 가능합니다");
         }
 
         try (InputStream is = multipartFile.getInputStream()) {
-            s3Operations.upload(BUCKET, multipartFile.getOriginalFilename(), is,
+            s3Operations.upload(BUCKET, key, is,
                     ObjectMetadata.builder().contentType(multipartFile.getContentType()).build());
         }
 

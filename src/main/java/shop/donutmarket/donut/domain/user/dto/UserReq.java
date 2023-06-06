@@ -13,14 +13,14 @@ public class UserReq {
     public static class JoinDTO {
         @Email(message = "이메일 형식으로 적어주세요")
         @NotBlank(message = "이메일을 적어주세요")
-        private String email;
+        private String username;
         @NotBlank(message = "비밀번호를 적어주세요")
         private String password;
         @NotBlank(message = "닉네임을 입력해주세요.")
         private String nickname;
 
         public User toEntity(Rate rate) {
-            return User.builder().username(email).email(email).password(password)
+            return User.builder().username(username).email(username).password(password)
                     .nickname(nickname).rate(rate).build();
         }
     }
@@ -38,8 +38,7 @@ public class UserReq {
     @Setter
     public static class UpdateDTO {
         private String password;
-        private String profile;
 
-        public User toEntity() {return User.builder().password(password).profile(profile).build();}
+        public User toEntity() {return User.builder().password(password).build();}
     }
 }

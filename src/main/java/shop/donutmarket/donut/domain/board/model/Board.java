@@ -27,7 +27,7 @@ public class Board {
     @JoinColumn(name = "organizer_id")
     private User organizer;
     private String content;
-    private String img;
+    private String imgKey;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
@@ -41,13 +41,13 @@ public class Board {
     private LocalDateTime createdAt;
 
     @Builder
-    public Board(Long id, Category category, String title, User organizer, String content, String img, Event event, Integer statusCode, int views, boolean recommend, String state, String city, String town, LocalDateTime createdAt) {
+    public Board(Long id, Category category, String title, User organizer, String content, String imgKey, Event event, Integer statusCode, int views, boolean recommend, String state, String city, String town, LocalDateTime createdAt) {
         this.id = id;
         this.category = category;
         this.title = title;
         this.organizer = organizer;
         this.content = content;
-        this.img = img;
+        this.imgKey = imgKey;
         this.event = event;
         this.statusCode = statusCode;
         this.views = views;

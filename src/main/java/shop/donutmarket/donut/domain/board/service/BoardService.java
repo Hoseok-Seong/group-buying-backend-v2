@@ -1,6 +1,5 @@
 package shop.donutmarket.donut.domain.board.service;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import shop.donutmarket.donut.domain.admin.model.Category;
 import shop.donutmarket.donut.domain.admin.repository.CategoryRepository;
 import shop.donutmarket.donut.domain.board.dto.BoardReq.BoardDeleteReqDTO;
@@ -35,7 +35,8 @@ import shop.donutmarket.donut.global.exception.Exception400;
 import shop.donutmarket.donut.global.exception.Exception403;
 import shop.donutmarket.donut.global.exception.Exception404;
 import shop.donutmarket.donut.global.exception.Exception500;
-import shop.donutmarket.donut.global.util.MyBase64Decoder;
+import shop.donutmarket.donut.global.s3.S3Service;
+import shop.donutmarket.donut.global.util.S3KeyGenerator;
 
 @Service
 @RequiredArgsConstructor
@@ -46,64 +47,57 @@ public class BoardService {
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-//    private final FileLoad fileLoad;
+    private final S3Service s3Service;
 
-//    @Transactional
-//    public BoardSaveRespDTO 게시글작성(BoardSaveReqDTO boardSaveReqDTO,
-//            @AuthenticationPrincipal MyUserDetails myUserDetails) {
-//        Optional<User> userOP = userRepository.findByIdJoinFetch(myUserDetails.getUser().getId());
-//
-//        if (userOP.isEmpty()) {
-//            throw new Exception404("존재하지 않는 유저입니다");
-//        }
-//
-//        Optional<Category> categoryOP = categoryRepository.findById(boardSaveReqDTO.getCategoryId());
-//        if (categoryOP.isEmpty()) {
-//            throw new Exception404("존재하지 않는 카테고리입니다");
-//        }
-//
-//        try {
-//            // event 먼저 save
-//            Event event = boardSaveReqDTO.toEventEntity();
-//            event = eventRepository.save(event);
-//            User user = userOP.get();
-//            Category category = categoryOP.get();
-//
-//            // image base64화
-//
-//            String imageName;
-//            String imglink;
-//            if (boardSaveReqDTO.getImg() == null) {
-//                // 존재하지 않을 경우 s3에 저장된 (카테고리이름) + 디폴트.jpg 사진을 가져오고 해당 링크를 저장
-//                imageName = category.getName() + "디폴트.jpg";
-//                imglink = fileLoad.downloadObject(imageName);
-//            } else {
-//                // 존재하면 사진 첨가 + s3에 저장
-//                // 로컬에 저장해 경로 생성 및 고유화
-//                String decodeLink = MyBase64Decoder.decodeBase64(boardSaveReqDTO.getImg());
-//                imageName = boardSaveReqDTO.getTitle() + " boardImg";
-//                fileLoad.uploadFile(imageName, decodeLink);
-//                imglink = fileLoad.downloadObject(imageName);
-//            }
-//            Board board = boardRepository.save(boardSaveReqDTO.toBoardEntity(event, category, imglink, user));
-//
-//            // tag save
-//            List<Tag> tagList = new ArrayList<>();
-//            if (boardSaveReqDTO.getComment() != null) {
-//                for (String comment : boardSaveReqDTO.getComment()) {
-//                    Tag tag = Tag.builder().boardId(board.getId()).comment(comment)
-//                            .createdAt(LocalDateTime.now()).build();
-//                    tagRepository.save(tag);
-//                    tagList.add(tag);
-//                }
-//            }
-//
-//            BoardSaveRespDTO boardSaveRespDTO = new BoardSaveRespDTO(board, tagList);
-//            return boardSaveRespDTO;
-//        } catch (Exception e) {
-//            throw new Exception500("게시글 작성 실패 : " + e.getMessage());
-//        }
-//    }
+    @Transactional
+    public BoardSaveRespDTO 게시글작성(MultipartFile multipartFile, BoardSaveReqDTO boardSaveReqDTO,
+                                  @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        Optional<User> userOP = userRepository.findByIdJoinFetch(myUserDetails.getUser().getId());
+
+        if (userOP.isEmpty()) {
+            throw new Exception404("존재하지 않는 유저입니다");
+        }
+
+        Optional<Category> categoryOP = categoryRepository.findById(boardSaveReqDTO.getCategoryId());
+        if (categoryOP.isEmpty()) {
+            throw new Exception404("존재하지 않는 카테고리입니다");
+        }
+
+        try {
+            // event 먼저 save
+            Event event = boardSaveReqDTO.toEventEntity();
+            event = eventRepository.save(event);
+            User user = userOP.get();
+            Category category = categoryOP.get();
+
+            String imgKey;
+            if (multipartFile == null) {
+                // 존재하지 않을 경우 "카테고리 이름-Default".jpg
+                imgKey = category.getName() + "-Default.jpg";
+            } else {
+                // 존재하면 S3에 업로드
+                imgKey = S3KeyGenerator.makeKey(multipartFile);
+                s3Service.upload(multipartFile, imgKey);
+            }
+            Board board = boardRepository.save(boardSaveReqDTO.toBoardEntity(event, category, imgKey, user));
+
+            // tag save
+            List<Tag> tagList = new ArrayList<>();
+            if (boardSaveReqDTO.getComment() != null) {
+                for (String comment : boardSaveReqDTO.getComment()) {
+                    Tag tag = Tag.builder().boardId(board.getId()).comment(comment)
+                            .createdAt(LocalDateTime.now()).build();
+                    tagRepository.save(tag);
+                    tagList.add(tag);
+                }
+            }
+
+            BoardSaveRespDTO boardSaveRespDTO = new BoardSaveRespDTO(board, tagList);
+            return boardSaveRespDTO;
+        } catch (Exception e) {
+            throw new Exception500("게시글 작성 실패 : " + e.getMessage());
+        }
+    }
 
     @Transactional(readOnly = true)
     public Board 게시글상세보기(Long id) {
@@ -122,7 +116,7 @@ public class BoardService {
             User organizer = boardPS.getOrganizer();
             Event event = boardPS.getEvent();
             Board board = Board.builder().id(boardPS.getId()).category(boardPS.getCategory()).title(boardPS.getTitle())
-                    .img(boardPS.getImg())
+                    .imgKey(boardPS.getImgKey())
                     .organizer(organizer).content(boardPS.getContent()).event(event).statusCode(boardPS.getStatusCode())
                     .state(boardPS.getState()).city(boardPS.getCity()).town(boardPS.getTown())
                     .createdAt(boardPS.getCreatedAt()).build();
