@@ -112,6 +112,7 @@ CREATE TABLE chat_room
 (
     id          Bigint AUTO_INCREMENT PRIMARY KEY,
     event_id    Bigint,
+    creator_id  Bigint       NOT NULL,
     user_id     Bigint       NOT NULL,
     chat_type   varchar(255) NOT NULL,
     status_code int DEFAULT '500',
