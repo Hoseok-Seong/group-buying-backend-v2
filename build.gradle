@@ -49,6 +49,9 @@ repositories {
 }
 
 dependencies {
+    // web socket 관련
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
     // restdocs 관련
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'

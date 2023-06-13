@@ -36,10 +36,6 @@ insert into blacklist(user_id, blocked_user_id, created_at) values(1, 2, now());
 
 insert into chatroom(event_id, status_code, created_at) values(1, 500, now());
 
-insert into chatter_list(chatroom_id, user_id, status_code, created_at) values(1, 1, 700, now());
-insert into chatter_list(chatroom_id, user_id, status_code, created_at) values(1, 2, 700, now());
-insert into chatter_list(chatroom_id, user_id, status_code, created_at) values(1, 3, 701, now());
-
 insert into review(reviewer_id, reviewed_id, score, comment, created_at) values(2, 1, 5, '빠른 거래 좋아요', now());
 
 insert into category(name, created_at) values('생활가전', now());

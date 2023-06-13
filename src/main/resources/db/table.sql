@@ -108,20 +108,22 @@ CREATE TABLE my_category
     created_at  timestamp NOT NULL
 );
 
-CREATE TABLE chatroom
+CREATE TABLE chat_room
 (
     id          Bigint AUTO_INCREMENT PRIMARY KEY,
-    event_id    Bigint    NOT NULL,
+    event_id    Bigint,
+    user_id     Bigint       NOT NULL,
+    chat_type   varchar(255) NOT NULL,
     status_code int DEFAULT '500',
     created_at  timestamp NOT NULL
 );
 
-CREATE TABLE chatter_list
+CREATE TABLE chat_message
 (
     id          Bigint AUTO_INCREMENT PRIMARY KEY,
     chatroom_id Bigint    NOT NULL,
-    user_id     Bigint    NOT NULL,
-    status_code int DEFAULT '700',
+    sender_id   Bigint    NOT NULL,
+    message     text      NOT NULL,
     created_at  timestamp NOT NULL
 );
 
