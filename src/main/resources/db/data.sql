@@ -34,8 +34,6 @@ insert into report(reporter_id, reported_id, board_id, title, content, report_ty
 
 insert into blacklist(user_id, blocked_user_id, created_at) values(1, 2, now());
 
-insert into chatroom(event_id, status_code, created_at) values(1, 500, now());
-
 insert into review(reviewer_id, reviewed_id, score, comment, created_at) values(2, 1, 5, '빠른 거래 좋아요', now());
 
 insert into category(name, created_at) values('생활가전', now());
