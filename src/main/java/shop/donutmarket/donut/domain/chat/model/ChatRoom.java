@@ -19,6 +19,7 @@ public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long chatroomId;
     private Long boardId;
     private Long creatorId;
     private Long userId;
@@ -28,8 +29,9 @@ public class ChatRoom {
     private LocalDateTime createdAt;
 
     @Builder
-    public ChatRoom(Long id, Long boardId, Long creatorId, Long userId, ChatType chatType, Integer statusCode, LocalDateTime createdAt) {
+    public ChatRoom(Long id, Long chatroomId, Long boardId, Long creatorId, Long userId, ChatType chatType, Integer statusCode, LocalDateTime createdAt) {
         this.id = id;
+        this.chatroomId = chatroomId;
         this.boardId = boardId;
         this.creatorId = creatorId;
         this.userId = userId;

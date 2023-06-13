@@ -19,8 +19,8 @@ public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long chatroom_id;
-    private Long sender_id;
+    private Long chatroomId;
+    private Long senderId;
     private String message;
     @CreationTimestamp
     private LocalDateTime createdAt;

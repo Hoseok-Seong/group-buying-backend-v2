@@ -22,6 +22,7 @@ public class ChatRoomReq {
 
         public ChatRoom toEntity() {
             return ChatRoom.builder()
+                    .chatroomId(boardId)
                     .boardId(boardId)
                     .creatorId(creatorId)
                     .userId(creatorId)
@@ -33,11 +34,14 @@ public class ChatRoomReq {
     @Getter
     @Setter
     public static class GroupChatRoomAddMember {
+        @NotNull(message = "채팅방 id를 입력해주세요")
+        private Long chatroomId;
         @NotNull(message = "유저 id를 입력해주세요")
         private Long userId;
 
         public ChatRoom toEntity(ChatRoom chatRoom) {
             return ChatRoom.builder()
+                    .chatroomId(chatRoom.getBoardId())
                     .boardId(chatRoom.getBoardId())
                     .creatorId(chatRoom.getCreatorId())
                     .userId(userId)

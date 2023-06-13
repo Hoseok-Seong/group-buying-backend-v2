@@ -52,9 +52,11 @@ public class ChatController {
     }
 
     @PostMapping("/chatroom/group/members/add")
-    public void chatroomAdd(@RequestBody @Valid GroupChatRoomAddMember chatRoomAddMember,
+    public ResponseEntity<?> chatroomAdd(@RequestBody @Valid GroupChatRoomAddMember chatRoomAddMember,
                             @AuthenticationPrincipal MyUserDetails myUserDetails,
                             BindingResult bindingResult) {
-        chatRoomService.addMember(chatRoomAddMember, myUserDetails);
+        GroupChatRoomResp respDTO = chatRoomService.addMember(chatRoomAddMember, myUserDetails);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(respDTO);
+        return ResponseEntity.ok(responseDTO);
     }
 }
