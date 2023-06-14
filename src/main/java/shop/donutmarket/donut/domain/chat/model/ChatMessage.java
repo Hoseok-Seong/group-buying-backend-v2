@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,4 +25,13 @@ public class ChatMessage {
     private String message;
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @Builder
+    public ChatMessage(Long id, Long chatroomId, Long senderId, String message, LocalDateTime createdAt) {
+        this.id = id;
+        this.chatroomId = chatroomId;
+        this.senderId = senderId;
+        this.message = message;
+        this.createdAt = createdAt;
+    }
 }

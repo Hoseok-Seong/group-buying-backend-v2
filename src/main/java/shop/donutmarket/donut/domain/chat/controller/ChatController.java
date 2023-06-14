@@ -9,9 +9,11 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import shop.donutmarket.donut.domain.chat.dto.ChatMessageReq;
+import shop.donutmarket.donut.domain.chat.dto.ChatMessageResp;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq.GroupChatRoomAddMember;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq.GroupChatRoomInit;
@@ -32,14 +34,14 @@ public class ChatController {
 
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
+    // /pub/chatroom/id
     @MessageMapping("/chatroom/{id}")
-    public void sendMessage(@DestinationVariable("id") Long id, ChatMessageReq chatMessageReq) {
-        System.out.println("id = " + id);
-        System.out.println("chatMessageReq RoomId = " + chatMessageReq.getChatroomId());
-        System.out.println("chatMessageReq SenderId = " + chatMessageReq.getSenderId());
-        System.out.println("chatMessageReq Message = " + chatMessageReq.getMessage());
+    public ResponseEntity<?> sendMessage(@DestinationVariable("id") Long id, ChatMessageReq chatMessageReq) {
         simpMessageSendingOperations.convertAndSend
                 ("/sub/chatroom/" + chatMessageReq.getChatroomId(), chatMessageReq);
+        ChatMessageResp respDTO = chatMessageService.saveMessage(chatMessageReq);
+        ResponseDTO<?> responseDTO = new ResponseDTO<>(respDTO);
+        return ResponseEntity.ok(responseDTO);
     }
 
     @PostMapping("/chatroom/group/init")
