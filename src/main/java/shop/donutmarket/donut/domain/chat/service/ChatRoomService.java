@@ -1,10 +1,12 @@
 package shop.donutmarket.donut.domain.chat.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.donutmarket.donut.domain.board.model.Board;
 import shop.donutmarket.donut.domain.board.repository.BoardRepository;
+import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq.GroupChatRoomAddMember;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq.GroupChatRoomInit;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomResp;
@@ -100,6 +102,36 @@ public class ChatRoomService {
             return groupChatRoomResp;
         } catch (Exception e) {
             throw new Exception500("채팅방 개설하기 실패 : " + e.getMessage());
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<?> deleteMember(ChatRoomReq.GroupChatRoomDeleteMember groupChatRoomDeleteMember,
+                                       MyUserDetails myUserDetails) {
+        Optional<User> userOP = userRepository.findByIdJoinFetch(myUserDetails.getUser().getId());
+
+        if (userOP.isEmpty()) {
+            throw new Exception404("존재하지 않는 사용자입니다");
+        }
+
+        Optional<ChatRoom> chatRoomOP = chatRoomRepository.findChatRoomByChatroomIdAndUserId(
+                groupChatRoomDeleteMember.getChatroomId(),
+                groupChatRoomDeleteMember.getUserId());
+
+        if (chatRoomOP.isEmpty()) {
+            throw new Exception404("해당 유저가 존재하지 않거나 존재하지 않는 채팅방입니다");
+        }
+
+        if (!Objects.equals(myUserDetails.getUser().getId(), groupChatRoomDeleteMember.getUserId())) {
+            throw new Exception403("채팅방에 나갈 수 있는 권한이 없습니다");
+        }
+        
+        try {
+            ChatRoom chatRoom = chatRoomOP.get();
+            chatRoomRepository.delete(chatRoom);
+            return ResponseEntity.ok("채팅방 퇴장하기 성공");
+        } catch (Exception e) {
+            throw new Exception500("채팅방 퇴장하기 실패 : " + e.getMessage());
         }
     }
 }

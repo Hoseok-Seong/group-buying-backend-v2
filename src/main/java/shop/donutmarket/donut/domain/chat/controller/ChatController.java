@@ -9,6 +9,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import shop.donutmarket.donut.domain.chat.dto.ChatMessageReq;
 import shop.donutmarket.donut.domain.chat.dto.ChatMessageResp;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq.GroupChatRoomAddMember;
+import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq.GroupChatRoomDeleteMember;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq.GroupChatRoomInit;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomResp;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomResp.GroupChatRoomResp;
@@ -34,6 +36,7 @@ public class ChatController {
 
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
+    // 메세지 전송 및 메세지 DB 저장
     // /pub/chatroom/id
     @MessageMapping("/chatroom/{id}")
     public ResponseEntity<?> sendMessage(@DestinationVariable("id") Long id, ChatMessageReq chatMessageReq) {
@@ -44,6 +47,7 @@ public class ChatController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    // 채팅방 개설
     @PostMapping("/chatroom/group/init")
     public ResponseEntity<?> chatroomInit(@RequestBody @Valid GroupChatRoomInit chatRoomInit,
                                           @AuthenticationPrincipal MyUserDetails myUserDetails,
@@ -53,12 +57,21 @@ public class ChatController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PostMapping("/chatroom/group/members/add")
+    // 채팅방 멤버 초대
+    @PostMapping("/chatroom/group/members")
     public ResponseEntity<?> chatroomAdd(@RequestBody @Valid GroupChatRoomAddMember chatRoomAddMember,
                             @AuthenticationPrincipal MyUserDetails myUserDetails,
                             BindingResult bindingResult) {
         GroupChatRoomResp respDTO = chatRoomService.addMember(chatRoomAddMember, myUserDetails);
         ResponseDTO<?> responseDTO = new ResponseDTO<>(respDTO);
         return ResponseEntity.ok(responseDTO);
+    }
+
+    // 채팅방 멤버 퇴장
+    @DeleteMapping("/chatroom/group/members")
+    public ResponseEntity<?> chatroomDelete(@RequestBody @Valid GroupChatRoomDeleteMember groupChatRoomDeleteMember,
+                                            @AuthenticationPrincipal MyUserDetails myUserDetails,
+                                            BindingResult bindingResult) {
+        return chatRoomService.deleteMember(groupChatRoomDeleteMember, myUserDetails);
     }
 }
