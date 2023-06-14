@@ -2,17 +2,14 @@ package shop.donutmarket.donut.domain.chat.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import shop.donutmarket.donut.domain.chat.dto.ChatMessageReq;
 import shop.donutmarket.donut.domain.chat.dto.ChatMessageResp;
 import shop.donutmarket.donut.domain.chat.dto.ChatRoomReq;
@@ -26,7 +23,8 @@ import shop.donutmarket.donut.domain.chat.service.ChatRoomService;
 import shop.donutmarket.donut.global.auth.MyUserDetails;
 import shop.donutmarket.donut.global.dto.ResponseDTO;
 
-@Controller
+@RestController
+@Slf4j
 @RequiredArgsConstructor
 public class ChatController {
 
@@ -39,12 +37,11 @@ public class ChatController {
     // 메세지 전송 및 메세지 DB 저장
     // /pub/chatroom/id
     @MessageMapping("/chatroom/{id}")
-    public ResponseEntity<?> sendMessage(@DestinationVariable("id") Long id, ChatMessageReq chatMessageReq) {
+    public void sendMessage(@DestinationVariable("id") Long id, ChatMessageReq chatMessageReq) {
         simpMessageSendingOperations.convertAndSend
                 ("/sub/chatroom/" + chatMessageReq.getChatroomId(), chatMessageReq);
-        ChatMessageResp respDTO = chatMessageService.saveMessage(chatMessageReq);
-        ResponseDTO<?> responseDTO = new ResponseDTO<>(respDTO);
-        return ResponseEntity.ok(responseDTO);
+        log.info("메세지 전송 성공");
+        chatMessageService.saveMessage(chatMessageReq);
     }
 
     // 채팅방 개설
