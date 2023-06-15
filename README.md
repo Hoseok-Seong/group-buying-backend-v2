@@ -90,7 +90,7 @@
   - Pub/Sub 기반으로 동작하여 그룹 채팅 구현 가능
 
 * Pub/Sub
-  - ![image](https://github.com/Hoseok-Seong/Springboot-RabbitMQ-Guide/assets/93416157/c6d16094-3070-40bf-8299-5ff35f5219eb)
+![pubsub](https://github.com/Hoseok-Seong/Spring-STOMP-RabbitMQ/assets/93416157/845b1550-32e8-400f-819e-451337166087)
 
 * build.gradle 의존성 추가
   - implementation 'org.springframework.boot:spring-boot-starter-websocket'
