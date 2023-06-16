@@ -35,9 +35,9 @@ public class ChatController {
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     // 메세지 전송 및 메세지 DB 저장
-    // /pub/chatroom/id
-    @MessageMapping("/chatroom/{id}")
-    public void sendMessage(@DestinationVariable("id") Long id, ChatMessageReq chatMessageReq) {
+    // /pub/chatroom
+    @MessageMapping("/chatroom")
+    public void sendMessage(ChatMessageReq chatMessageReq) {
         simpMessageSendingOperations.convertAndSend
                 ("/sub/chatroom/" + chatMessageReq.getChatroomId(), chatMessageReq);
         log.info("메세지 전송 성공");
