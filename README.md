@@ -128,4 +128,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 * 기술 블로그
   - https://white-developer.tistory.com/78
+  - https://white-developer.tistory.com/80
 
